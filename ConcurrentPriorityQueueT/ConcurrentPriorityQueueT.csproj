@@ -11,6 +11,7 @@
 		<Authors>Thien H.</Authors>
 		<Version>0.6.0</Version>
 		<Description>A concurrent priority queue with parallelism.</Description>
+		<RepositoryUrl>https://github.com/TizzyT566/ConcurrentPriorityQueueT</RepositoryUrl>
 	</PropertyGroup>
 
 </Project>

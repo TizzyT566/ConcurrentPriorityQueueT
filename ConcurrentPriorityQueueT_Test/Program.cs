@@ -50,6 +50,7 @@ priorityQ.TryDequeueAsync(r =>
         Console.WriteLine("Queue is empty");
 });
 
+
 // Parallel
 Random rnd = new();
 Parallel.For(0, 10000, i =>
@@ -58,7 +59,7 @@ Parallel.For(0, 10000, i =>
     priorityQ.TryEnqueueAsync(n, n.ToString());
 });
 
-// Waits for all asynchronous enqueues to complete
+// Waits for all asynchronous enqueues to complete with a
 Console.WriteLine($"Async Enqueues left: {priorityQ.AsyncEnqueueOperations}");
 priorityQ.WaitForAsyncEnqueues(2000);
 Console.WriteLine($"Async Enqueues left: {priorityQ.AsyncEnqueueOperations}");
