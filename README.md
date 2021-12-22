@@ -23,92 +23,107 @@ Nuget Package: [https://www.nuget.org/packages/ConcurrentPriorityQueueT/](https:
 ## Usage:
 
 ### Properties
-    /// <summary>
-    /// The priority mode to set the priority queue.
-    /// </summary>
-    public PriorityType Mode { get; private set; }
-
-    /// <summary>
-    /// The number of values currently in the queue.
-    /// </summary>
-    public int Count
-
-    /// <summary>
-    /// The number of asynchronous operations currently scheduled.
-    /// </summary>
-    public int AsyncEnqueueOperations
+```csharp
+/// <summary>
+/// The priority mode to set the priority queue.
+/// </summary>
+public PriorityType Mode { get; private set; }
+```
+```csharp
+/// <summary>
+/// The number of values currently in the queue.
+/// </summary>
+public int Count
+```
+```csharp
+/// <summary>
+/// The number of asynchronous operations currently scheduled.
+/// </summary>
+public int AsyncEnqueueOperations
+```
 
 ### Constructor
-    /// <summary>
-    /// Creates a new concurrent priority queue.
-    /// </summary>
-    /// <param name="mode">The type of priority to use for the queue.</param>
-    public ConcurrentPriorityQueue(PriorityType mode = PriorityType.Max)
+```csharp
+/// <summary>
+/// Creates a new concurrent priority queue.
+/// </summary>
+/// <param name="mode">The type of priority to use for the queue.</param>
+public ConcurrentPriorityQueue(PriorityType mode = PriorityType.Max)
+```
 
 ### Methods
-    /// <summary>
-    /// Tries to add an entry to the priority queue.
-    /// </summary>
-    /// <param name="priority">A comparable value to be used as the priority.</param>
-    /// <param name="value">The value to be stored into the queue.</param>
-    /// <param name="allowDuplicates">Whether or not to allow adding duplicate entry.</param>
-    /// <returns>true if entry was successfully added to the queue, otherwise false.</returns>
-    /// <remarks>This method blocks until the enqueue operation has completed.</remarks>
-    public bool TryEnqueue(P priority, V value, bool allowDuplicates = true)
-
-    /// <summary>
-    /// Asynchronously adds to the priority queue.
-    /// </summary>
-    /// <param name="priority">A comparable value to be used as the priority.</param>
-    /// <param name="value">The value to be stored into the queue.</param>
-    /// <param name="callback">The callback to invoke once the enqueue operation has completed.</param>
-    /// <remarks>This method does not block.</remarks>
-    public void TryEnqueueAsync(P priority, V value, Action<AsyncPriorityOperationResult>? callback = null)
-
-    /// <summary>
-    /// Asynchronously adds an entry to the priority queue.
-    /// </summary>
-    /// <param name="priority">A comparable value to be used as the priority.</param>
-    /// <param name="value">The value to be stored into the queue.</param>
-    /// <param name="allowDuplicates">Whether or not to allow adding duplicate entry.</param>
-    /// <param name="callback">The callback to invoke once the enqueue operation has completed.</param>
-    /// <remarks>This method does not block.</remarks>
-    public void TryEnqueueAsync(P priority, V value, bool allowDuplicates, Action<AsyncPriorityOperationResult>? callback = null)
-
-    /// <summary>
-    /// Tries to retrieve and remove from the priority queue.
-    /// </summary>
-    /// <param name="value">The value which has been dequeued.</param>
-    /// <returns>true if an entry has been successfully dequeued, otherwise false.</returns>
-    /// <remarks>This method blocks until the dequeue operation has completed.</remarks>
-    public bool TryDequeue(out V value)
-
-    /// <summary>
-    /// Asyncronously dequeues an entry from the priority queue.
-    /// </summary>
-    /// <param name="callback">The callback delegate to invoke after dequeuing has completed.</param>
-    /// <remarks>This method does not block.</remarks>
-    public void TryDequeueAsync(Action<AsyncPriorityOperationResult>? callback = null)
-
-    /// <summary>
-    /// Tries to retrieve without removing from the priority queue.
-    /// </summary>
-    /// <param name="value">The value at the beginning of the priority queue.</param>
-    /// <returns>true if an entry has been successfully retrieved, otherwise false.</returns>
-    /// <remarks>This method blocks until the peek operation has completed.</remarks>
-    public bool TryPeek(out V? value)
-
-    /// <summary>
-    /// Blocks until all asynchronous enqueue opertions are completed.
-    /// </summary>
-    /// <remarks>This method blocks until there are no more active asynchronous enqueues</remarks>
-    public void WaitForAsyncEnqueues(int millisecondsTimeout = 0)
-
-    /// <summary>
-    /// Clears the entries currently in the queue.
-    /// </summary>
-    /// <remarks>Asynchronous enqueues after this method will still be added.</remarks>
-    public void Clear()
+```csharp
+/// <summary>
+/// Tries to add an entry to the priority queue.
+/// </summary>
+/// <param name="priority">A comparable value to be used as the priority.</param>
+/// <param name="value">The value to be stored into the queue.</param>
+/// <param name="allowDuplicates">Whether or not to allow adding duplicate entry.</param>
+/// <returns>true if entry was successfully added to the queue, otherwise false.</returns>
+/// <remarks>This method blocks until the enqueue operation has completed.</remarks>
+public bool TryEnqueue(P priority, V value, bool allowDuplicates = true)
+```
+```csharp
+/// <summary>
+/// Asynchronously adds to the priority queue.
+/// </summary>
+/// <param name="priority">A comparable value to be used as the priority.</param>
+/// <param name="value">The value to be stored into the queue.</param>
+/// <param name="callback">The callback to invoke once the enqueue operation has completed.</param>
+/// <remarks>This method does not block.</remarks>
+public void TryEnqueueAsync(P priority, V value, Action<AsyncPriorityOperationResult>? callback = null)
+```
+```csharp
+/// <summary>
+/// Asynchronously adds an entry to the priority queue.
+/// </summary>
+/// <param name="priority">A comparable value to be used as the priority.</param>
+/// <param name="value">The value to be stored into the queue.</param>
+/// <param name="allowDuplicates">Whether or not to allow adding duplicate entry.</param>
+/// <param name="callback">The callback to invoke once the enqueue operation has completed.</param>
+/// <remarks>This method does not block.</remarks>
+public void TryEnqueueAsync(P priority, V value, bool allowDuplicates, Action<AsyncPriorityOperationResult>? callback = null)
+```
+```csharp
+/// <summary>
+/// Tries to retrieve and remove from the priority queue.
+/// </summary>
+/// <param name="value">The value which has been dequeued.</param>
+/// <returns>true if an entry has been successfully dequeued, otherwise false.</returns>
+/// <remarks>This method blocks until the dequeue operation has completed.</remarks>
+public bool TryDequeue(out V value)
+```
+```csharp
+/// <summary>
+/// Asyncronously dequeues an entry from the priority queue.
+/// </summary>
+/// <param name="callback">The callback delegate to invoke after dequeuing has completed.</param>
+/// <remarks>This method does not block.</remarks>
+public void TryDequeueAsync(Action<AsyncPriorityOperationResult>? callback = null)
+```
+```csharp
+/// <summary>
+/// Tries to retrieve without removing from the priority queue.
+/// </summary>
+/// <param name="value">The value at the beginning of the priority queue.</param>
+/// <returns>true if an entry has been successfully retrieved, otherwise false.</returns>
+/// <remarks>This method blocks until the peek operation has completed.</remarks>
+public bool TryPeek(out V? value)
+```
+```csharp
+/// <summary>
+/// Blocks until all asynchronous enqueue opertions are completed.
+/// </summary>
+/// <remarks>This method blocks until there are no more active asynchronous enqueues</remarks>
+public void WaitForAsyncEnqueues(int millisecondsTimeout = 0)
+```
+```csharp
+/// <summary>
+/// Clears the entries currently in the queue.
+/// </summary>
+/// <remarks>Asynchronous enqueues after this method will still be added.</remarks>
+public void Clear()
+```
 
 ### Examples:
 
