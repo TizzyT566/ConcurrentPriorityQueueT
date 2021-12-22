@@ -13,11 +13,12 @@ Nuget Package: [https://www.nuget.org/packages/ConcurrentPriorityQueueT/](https:
 
 ## Complexity
 
-Enqueue: O(n), Calling thread must wait until after iterating the list for correct placement.<br />
-EnqueueAsync: O(n), Calling thread immediately continues after offloading the work onto a worker thread.<br />
-Dequeue: O(1), Calling thread must wait if the queue is empty but active enqueues are present.<br />
-DequeueAsync: O(1), Calling thread immediately continues after offloading the work onto a worker thread.<br />
-Peek: O(1), Calling thread must wait if the queue is empty but active enqueues are present.<br />
+- Enqueue: O(n) - Calling thread must wait until after iterating the list for correct placement.
+- EnqueueAsync: O(n) - Calling thread immediately continues after offloading the work onto a worker thread.
+- Dequeue: O(1) - Calling thread must wait if the queue is empty but active enqueues are present.
+- DequeueAsync: O(1) - Calling thread immediately continues after offloading the work onto a worker thread.
+- Peek: O(1) - Calling thread must wait if the queue is empty but active enqueues are present.
+- Clear: O(1)
 
 ## Usage:
 
@@ -50,7 +51,7 @@ Peek: O(1), Calling thread must wait if the queue is empty but active enqueues a
     /// </summary>
     /// <param name="priority">A comparable value to be used as the priority.</param>
     /// <param name="value">The value to be stored into the queue.</param>
-    /// <param name="allowDuplicates">Whether or not to allow adding if an entry with the same priority already exists.</param>
+    /// <param name="allowDuplicates">Whether or not to allow adding duplicate entry.</param>
     /// <returns>true if entry was successfully added to the queue, otherwise false.</returns>
     /// <remarks>This method blocks until the enqueue operation has completed.</remarks>
     public bool TryEnqueue(P priority, V value, bool allowDuplicates = true)
@@ -69,7 +70,7 @@ Peek: O(1), Calling thread must wait if the queue is empty but active enqueues a
     /// </summary>
     /// <param name="priority">A comparable value to be used as the priority.</param>
     /// <param name="value">The value to be stored into the queue.</param>
-    /// <param name="allowDuplicates">Whether or not to allow adding if an entry with the same priority already exists.</param>
+    /// <param name="allowDuplicates">Whether or not to allow adding duplicate entry.</param>
     /// <param name="callback">The callback to invoke once the enqueue operation has completed.</param>
     /// <remarks>This method does not block.</remarks>
     public void TryEnqueueAsync(P priority, V value, bool allowDuplicates, Action<AsyncPriorityOperationResult>? callback = null)
