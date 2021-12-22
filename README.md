@@ -22,89 +22,92 @@ Peek: O(1), Calling thread must wait if the queue is empty but active enqueues a
 ## Usage:
 
 ### Properties
-<pre style="font-family:Cascadia Mono;font-size:13px;color:#dadada;background:#1e1e1e;"><span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;</span><span style="color:#608b4e;">summary</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;The&nbsp;priority&nbsp;mode&nbsp;to&nbsp;set&nbsp;the&nbsp;priority&nbsp;queue.</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;/</span><span style="color:#608b4e;">summary</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#569cd6;">public</span>&nbsp;<span style="color:gainsboro;">PriorityType</span>&nbsp;<span style="color:gainsboro;">Mode</span></pre>
+    /// <summary>
+    /// The priority mode to set the priority queue.
+    /// </summary>
+    public PriorityType Mode { get; private set; }
 
-<pre style="font-family:Cascadia Mono;font-size:13px;color:#dadada;background:#1e1e1e;"><span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;</span><span style="color:#608b4e;">summary</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;The&nbsp;number&nbsp;of&nbsp;values&nbsp;currently&nbsp;in&nbsp;the&nbsp;queue.</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;/</span><span style="color:#608b4e;">summary</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#569cd6;">public</span>&nbsp;<span style="color:#569cd6;">int</span>&nbsp;<span style="color:gainsboro;">Count</span></pre>
+    /// <summary>
+    /// The number of values currently in the queue.
+    /// </summary>
+    public int Count
 
-<pre style="font-family:Cascadia Mono;font-size:13px;color:#dadada;background:#1e1e1e;"><span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;</span><span style="color:#608b4e;">summary</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;The&nbsp;number&nbsp;of&nbsp;asynchronous&nbsp;operations&nbsp;currently&nbsp;scheduled.</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;/</span><span style="color:#608b4e;">summary</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#569cd6;">public</span>&nbsp;<span style="color:#569cd6;">int</span>&nbsp;<span style="color:gainsboro;">AsyncEnqueueOperations</span></pre>
+    /// <summary>
+    /// The number of asynchronous operations currently scheduled.
+    /// </summary>
+    public int AsyncEnqueueOperations
 
 ### Constructor
-<pre style="font-family:Cascadia Mono;font-size:13px;color:#dadada;background:#1e1e1e;"><span style="color:#569cd6;">public</span>&nbsp;<span style="color:#4ec9b0;">ConcurrentPriorityQueue</span><span style="color:gainsboro;">(</span><span style="color:gainsboro;">PriorityType</span>&nbsp;<span style="color:#9cdcfe;">mode</span>&nbsp;<span style="color:#b4b4b4;">=</span>&nbsp;<span style="color:gainsboro;">PriorityType</span><span style="color:#b4b4b4;">.</span><span style="color:gainsboro;">Max</span><span style="color:gainsboro;">)</span>
-</pre>
+    /// <summary>
+    /// Creates a new concurrent priority queue.
+    /// </summary>
+    /// <param name="mode">The type of priority to use for the queue.</param>
+    public ConcurrentPriorityQueue(PriorityType mode = PriorityType.Max)
 
 ### Methods
-<pre style="font-family:Cascadia Mono;font-size:13px;color:#dadada;background:#1e1e1e;"><span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;</span><span style="color:#608b4e;">summary</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;Tries&nbsp;to&nbsp;add&nbsp;an&nbsp;entry&nbsp;to&nbsp;the&nbsp;priority&nbsp;queue.</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;/</span><span style="color:#608b4e;">summary</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;</span><span style="color:#608b4e;">param</span>&nbsp;<span style="color:#c8c8c8;">name</span><span style="color:#608b4e;">=</span><span style="color:#c8c8c8;">&quot;</span><span style="color:gainsboro;">priority</span><span style="color:#c8c8c8;">&quot;</span><span style="color:#608b4e;">&gt;</span><span style="color:#608b4e;">A&nbsp;comparable&nbsp;value&nbsp;to&nbsp;be&nbsp;used&nbsp;as&nbsp;the&nbsp;priority.</span><span style="color:#608b4e;">&lt;/</span><span style="color:#608b4e;">param</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;</span><span style="color:#608b4e;">param</span>&nbsp;<span style="color:#c8c8c8;">name</span><span style="color:#608b4e;">=</span><span style="color:#c8c8c8;">&quot;</span><span style="color:gainsboro;">value</span><span style="color:#c8c8c8;">&quot;</span><span style="color:#608b4e;">&gt;</span><span style="color:#608b4e;">The&nbsp;value&nbsp;to&nbsp;be&nbsp;stored&nbsp;into&nbsp;the&nbsp;queue.</span><span style="color:#608b4e;">&lt;/</span><span style="color:#608b4e;">param</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;</span><span style="color:#608b4e;">param</span>&nbsp;<span style="color:#c8c8c8;">name</span><span style="color:#608b4e;">=</span><span style="color:#c8c8c8;">&quot;</span><span style="color:gainsboro;">allowDuplicates</span><span style="color:#c8c8c8;">&quot;</span><span style="color:#608b4e;">&gt;</span><span style="color:#608b4e;">Whether&nbsp;or&nbsp;not&nbsp;to&nbsp;allow&nbsp;adding&nbsp;if&nbsp;an&nbsp;entry&nbsp;with&nbsp;the&nbsp;same&nbsp;priority&nbsp;already&nbsp;exists.</span><span style="color:#608b4e;">&lt;/</span><span style="color:#608b4e;">param</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;</span><span style="color:#608b4e;">returns</span><span style="color:#608b4e;">&gt;</span><span style="color:#608b4e;">true&nbsp;if&nbsp;entry&nbsp;was&nbsp;successfully&nbsp;added&nbsp;to&nbsp;the&nbsp;queue,&nbsp;otherwise&nbsp;false.</span><span style="color:#608b4e;">&lt;/</span><span style="color:#608b4e;">returns</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;</span><span style="color:#608b4e;">remarks</span><span style="color:#608b4e;">&gt;</span><span style="color:#608b4e;">This&nbsp;method&nbsp;blocks&nbsp;until&nbsp;the&nbsp;enqueue&nbsp;operation&nbsp;has&nbsp;completed.</span><span style="color:#608b4e;">&lt;/</span><span style="color:#608b4e;">remarks</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#569cd6;">public</span>&nbsp;<span style="color:#569cd6;">bool</span>&nbsp;<span style="color:#dcdcaa;">TryEnqueue</span><span style="color:gainsboro;">(</span><span style="color:gainsboro;">P</span>&nbsp;<span style="color:#9cdcfe;">priority</span><span style="color:gainsboro;">,</span>&nbsp;<span style="color:gainsboro;">V</span>&nbsp;<span style="color:#9cdcfe;">value</span><span style="color:gainsboro;">,</span>&nbsp;<span style="color:#569cd6;">bool</span>&nbsp;<span style="color:#9cdcfe;">allowDuplicates</span>&nbsp;<span style="color:#b4b4b4;">=</span>&nbsp;<span style="color:#569cd6;">true</span><span style="color:gainsboro;">)</span></pre>
+    /// <summary>
+    /// Tries to add an entry to the priority queue.
+    /// </summary>
+    /// <param name="priority">A comparable value to be used as the priority.</param>
+    /// <param name="value">The value to be stored into the queue.</param>
+    /// <param name="allowDuplicates">Whether or not to allow adding if an entry with the same priority already exists.</param>
+    /// <returns>true if entry was successfully added to the queue, otherwise false.</returns>
+    /// <remarks>This method blocks until the enqueue operation has completed.</remarks>
+    public bool TryEnqueue(P priority, V value, bool allowDuplicates = true)
 
-<pre style="font-family:Cascadia Mono;font-size:13px;color:#dadada;background:#1e1e1e;"><span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;</span><span style="color:#608b4e;">summary</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;Asynchronously&nbsp;adds&nbsp;to&nbsp;the&nbsp;priority&nbsp;queue.</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;/</span><span style="color:#608b4e;">summary</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;</span><span style="color:#608b4e;">param</span>&nbsp;<span style="color:#c8c8c8;">name</span><span style="color:#608b4e;">=</span><span style="color:#c8c8c8;">&quot;</span><span style="color:gainsboro;">priority</span><span style="color:#c8c8c8;">&quot;</span><span style="color:#608b4e;">&gt;</span><span style="color:#608b4e;">A&nbsp;comparable&nbsp;value&nbsp;to&nbsp;be&nbsp;used&nbsp;as&nbsp;the&nbsp;priority.</span><span style="color:#608b4e;">&lt;/</span><span style="color:#608b4e;">param</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;</span><span style="color:#608b4e;">param</span>&nbsp;<span style="color:#c8c8c8;">name</span><span style="color:#608b4e;">=</span><span style="color:#c8c8c8;">&quot;</span><span style="color:gainsboro;">value</span><span style="color:#c8c8c8;">&quot;</span><span style="color:#608b4e;">&gt;</span><span style="color:#608b4e;">The&nbsp;value&nbsp;to&nbsp;be&nbsp;stored&nbsp;into&nbsp;the&nbsp;queue.</span><span style="color:#608b4e;">&lt;/</span><span style="color:#608b4e;">param</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;</span><span style="color:#608b4e;">param</span>&nbsp;<span style="color:#c8c8c8;">name</span><span style="color:#608b4e;">=</span><span style="color:#c8c8c8;">&quot;</span><span style="color:gainsboro;">callback</span><span style="color:#c8c8c8;">&quot;</span><span style="color:#608b4e;">&gt;</span><span style="color:#608b4e;">The&nbsp;callback&nbsp;to&nbsp;invoke&nbsp;once&nbsp;the&nbsp;enqueue&nbsp;operation&nbsp;has&nbsp;completed.</span><span style="color:#608b4e;">&lt;/</span><span style="color:#608b4e;">param</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;</span><span style="color:#608b4e;">remarks</span><span style="color:#608b4e;">&gt;</span><span style="color:#608b4e;">This&nbsp;method&nbsp;does&nbsp;not&nbsp;block.</span><span style="color:#608b4e;">&lt;/</span><span style="color:#608b4e;">remarks</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#569cd6;">public</span>&nbsp;<span style="color:#569cd6;">void</span>&nbsp;<span style="color:#dcdcaa;">TryEnqueueAsync</span><span style="color:gainsboro;">(</span><span style="color:gainsboro;">P</span>&nbsp;<span style="color:#9cdcfe;">priority</span><span style="color:gainsboro;">,</span>&nbsp;<span style="color:gainsboro;">V</span>&nbsp;<span style="color:#9cdcfe;">value</span><span style="color:gainsboro;">,</span>&nbsp;<span style="color:gainsboro;">Action</span><span style="color:gainsboro;">&lt;</span><span style="color:gainsboro;">AsyncPriorityOperationResult</span><span style="color:gainsboro;">&gt;</span><span style="color:#b4b4b4;">?</span>&nbsp;<span style="color:#9cdcfe;">callback</span>&nbsp;<span style="color:#b4b4b4;">=</span>&nbsp;<span style="color:#569cd6;">null</span><span style="color:gainsboro;">)</span></pre>
+    /// <summary>
+    /// Asynchronously adds to the priority queue.
+    /// </summary>
+    /// <param name="priority">A comparable value to be used as the priority.</param>
+    /// <param name="value">The value to be stored into the queue.</param>
+    /// <param name="callback">The callback to invoke once the enqueue operation has completed.</param>
+    /// <remarks>This method does not block.</remarks>
+    public void TryEnqueueAsync(P priority, V value, Action<AsyncPriorityOperationResult>? callback = null)
 
-<pre style="font-family:Cascadia Mono;font-size:13px;color:#dadada;background:#1e1e1e;"><span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;</span><span style="color:#608b4e;">summary</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;Asynchronously&nbsp;adds&nbsp;an&nbsp;entry&nbsp;to&nbsp;the&nbsp;priority&nbsp;queue.</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;/</span><span style="color:#608b4e;">summary</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;</span><span style="color:#608b4e;">param</span>&nbsp;<span style="color:#c8c8c8;">name</span><span style="color:#608b4e;">=</span><span style="color:#c8c8c8;">&quot;</span><span style="color:gainsboro;">priority</span><span style="color:#c8c8c8;">&quot;</span><span style="color:#608b4e;">&gt;</span><span style="color:#608b4e;">A&nbsp;comparable&nbsp;value&nbsp;to&nbsp;be&nbsp;used&nbsp;as&nbsp;the&nbsp;priority.</span><span style="color:#608b4e;">&lt;/</span><span style="color:#608b4e;">param</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;</span><span style="color:#608b4e;">param</span>&nbsp;<span style="color:#c8c8c8;">name</span><span style="color:#608b4e;">=</span><span style="color:#c8c8c8;">&quot;</span><span style="color:gainsboro;">value</span><span style="color:#c8c8c8;">&quot;</span><span style="color:#608b4e;">&gt;</span><span style="color:#608b4e;">The&nbsp;value&nbsp;to&nbsp;be&nbsp;stored&nbsp;into&nbsp;the&nbsp;queue.</span><span style="color:#608b4e;">&lt;/</span><span style="color:#608b4e;">param</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;</span><span style="color:#608b4e;">param</span>&nbsp;<span style="color:#c8c8c8;">name</span><span style="color:#608b4e;">=</span><span style="color:#c8c8c8;">&quot;</span><span style="color:gainsboro;">allowDuplicates</span><span style="color:#c8c8c8;">&quot;</span><span style="color:#608b4e;">&gt;</span><span style="color:#608b4e;">Whether&nbsp;or&nbsp;not&nbsp;to&nbsp;allow&nbsp;adding&nbsp;if&nbsp;an&nbsp;entry&nbsp;with&nbsp;the&nbsp;same&nbsp;priority&nbsp;already&nbsp;exists.</span><span style="color:#608b4e;">&lt;/</span><span style="color:#608b4e;">param</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;</span><span style="color:#608b4e;">param</span>&nbsp;<span style="color:#c8c8c8;">name</span><span style="color:#608b4e;">=</span><span style="color:#c8c8c8;">&quot;</span><span style="color:gainsboro;">callback</span><span style="color:#c8c8c8;">&quot;</span><span style="color:#608b4e;">&gt;</span><span style="color:#608b4e;">The&nbsp;callback&nbsp;to&nbsp;invoke&nbsp;once&nbsp;the&nbsp;enqueue&nbsp;operation&nbsp;has&nbsp;completed.</span><span style="color:#608b4e;">&lt;/</span><span style="color:#608b4e;">param</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;</span><span style="color:#608b4e;">remarks</span><span style="color:#608b4e;">&gt;</span><span style="color:#608b4e;">This&nbsp;method&nbsp;does&nbsp;not&nbsp;block.</span><span style="color:#608b4e;">&lt;/</span><span style="color:#608b4e;">remarks</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#569cd6;">public</span>&nbsp;<span style="color:#569cd6;">void</span>&nbsp;<span style="color:#dcdcaa;">TryEnqueueAsync</span><span style="color:gainsboro;">(</span><span style="color:gainsboro;">P</span>&nbsp;<span style="color:#9cdcfe;">priority</span><span style="color:gainsboro;">,</span>&nbsp;<span style="color:gainsboro;">V</span>&nbsp;<span style="color:#9cdcfe;">value</span><span style="color:gainsboro;">,</span>&nbsp;<span style="color:#569cd6;">bool</span>&nbsp;<span style="color:#9cdcfe;">allowDuplicates</span><span style="color:gainsboro;">,</span>&nbsp;<span style="color:gainsboro;">Action</span><span style="color:gainsboro;">&lt;</span><span style="color:gainsboro;">AsyncPriorityOperationResult</span><span style="color:gainsboro;">&gt;</span><span style="color:#b4b4b4;">?</span>&nbsp;<span style="color:#9cdcfe;">callback</span>&nbsp;<span style="color:#b4b4b4;">=</span>&nbsp;<span style="color:#569cd6;">null</span><span style="color:gainsboro;">)</span></pre>
+    /// <summary>
+    /// Asynchronously adds an entry to the priority queue.
+    /// </summary>
+    /// <param name="priority">A comparable value to be used as the priority.</param>
+    /// <param name="value">The value to be stored into the queue.</param>
+    /// <param name="allowDuplicates">Whether or not to allow adding if an entry with the same priority already exists.</param>
+    /// <param name="callback">The callback to invoke once the enqueue operation has completed.</param>
+    /// <remarks>This method does not block.</remarks>
+    public void TryEnqueueAsync(P priority, V value, bool allowDuplicates, Action<AsyncPriorityOperationResult>? callback = null)
 
-<pre style="font-family:Cascadia Mono;font-size:13px;color:#dadada;background:#1e1e1e;"><span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;</span><span style="color:#608b4e;">summary</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;Tries&nbsp;to&nbsp;retrieve&nbsp;and&nbsp;remove&nbsp;from&nbsp;the&nbsp;priority&nbsp;queue.</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;/</span><span style="color:#608b4e;">summary</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;</span><span style="color:#608b4e;">param</span>&nbsp;<span style="color:#c8c8c8;">name</span><span style="color:#608b4e;">=</span><span style="color:#c8c8c8;">&quot;</span><span style="color:gainsboro;">value</span><span style="color:#c8c8c8;">&quot;</span><span style="color:#608b4e;">&gt;</span><span style="color:#608b4e;">The&nbsp;value&nbsp;which&nbsp;has&nbsp;been&nbsp;dequeued.</span><span style="color:#608b4e;">&lt;/</span><span style="color:#608b4e;">param</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;</span><span style="color:#608b4e;">returns</span><span style="color:#608b4e;">&gt;</span><span style="color:#608b4e;">true&nbsp;if&nbsp;an&nbsp;entry&nbsp;has&nbsp;been&nbsp;successfully&nbsp;dequeued,&nbsp;otherwise&nbsp;false.</span><span style="color:#608b4e;">&lt;/</span><span style="color:#608b4e;">returns</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;</span><span style="color:#608b4e;">remarks</span><span style="color:#608b4e;">&gt;</span><span style="color:#608b4e;">This&nbsp;method&nbsp;blocks&nbsp;until&nbsp;the&nbsp;dequeue&nbsp;operation&nbsp;has&nbsp;completed.</span><span style="color:#608b4e;">&lt;/</span><span style="color:#608b4e;">remarks</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#569cd6;">public</span>&nbsp;<span style="color:#569cd6;">bool</span>&nbsp;<span style="color:#dcdcaa;">TryDequeue</span><span style="color:gainsboro;">(</span><span style="color:#569cd6;">out</span>&nbsp;<span style="color:gainsboro;">V</span>&nbsp;<span style="color:#9cdcfe;">value</span><span style="color:gainsboro;">)</span></pre>
+    /// <summary>
+    /// Tries to retrieve and remove from the priority queue.
+    /// </summary>
+    /// <param name="value">The value which has been dequeued.</param>
+    /// <returns>true if an entry has been successfully dequeued, otherwise false.</returns>
+    /// <remarks>This method blocks until the dequeue operation has completed.</remarks>
+    public bool TryDequeue(out V value)
 
-<pre style="font-family:Cascadia Mono;font-size:13px;color:#dadada;background:#1e1e1e;"><span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;</span><span style="color:#608b4e;">summary</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;Asyncronously&nbsp;dequeues&nbsp;an&nbsp;entry&nbsp;from&nbsp;the&nbsp;priority&nbsp;queue.</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;/</span><span style="color:#608b4e;">summary</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;</span><span style="color:#608b4e;">param</span>&nbsp;<span style="color:#c8c8c8;">name</span><span style="color:#608b4e;">=</span><span style="color:#c8c8c8;">&quot;</span><span style="color:gainsboro;">callback</span><span style="color:#c8c8c8;">&quot;</span><span style="color:#608b4e;">&gt;</span><span style="color:#608b4e;">The&nbsp;callback&nbsp;delegate&nbsp;to&nbsp;invoke&nbsp;after&nbsp;dequeuing&nbsp;has&nbsp;completed.</span><span style="color:#608b4e;">&lt;/</span><span style="color:#608b4e;">param</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;</span><span style="color:#608b4e;">remarks</span><span style="color:#608b4e;">&gt;</span><span style="color:#608b4e;">This&nbsp;method&nbsp;does&nbsp;not&nbsp;block.</span><span style="color:#608b4e;">&lt;/</span><span style="color:#608b4e;">remarks</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#569cd6;">public</span>&nbsp;<span style="color:#569cd6;">void</span>&nbsp;<span style="color:#dcdcaa;">TryDequeueAsync</span><span style="color:gainsboro;">(</span><span style="color:gainsboro;">Action</span><span style="color:gainsboro;">&lt;</span><span style="color:gainsboro;">AsyncPriorityOperationResult</span><span style="color:gainsboro;">&gt;</span><span style="color:#b4b4b4;">?</span>&nbsp;<span style="color:#9cdcfe;">callback</span>&nbsp;<span style="color:#b4b4b4;">=</span>&nbsp;<span style="color:#569cd6;">null</span><span style="color:gainsboro;">)</span></pre>
+    /// <summary>
+    /// Asyncronously dequeues an entry from the priority queue.
+    /// </summary>
+    /// <param name="callback">The callback delegate to invoke after dequeuing has completed.</param>
+    /// <remarks>This method does not block.</remarks>
+    public void TryDequeueAsync(Action<AsyncPriorityOperationResult>? callback = null)
 
-<pre style="font-family:Cascadia Mono;font-size:13px;color:#dadada;background:#1e1e1e;"><span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;</span><span style="color:#608b4e;">summary</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;Tries&nbsp;to&nbsp;retrieve&nbsp;without&nbsp;removing&nbsp;from&nbsp;the&nbsp;priority&nbsp;queue.</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;/</span><span style="color:#608b4e;">summary</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;</span><span style="color:#608b4e;">param</span>&nbsp;<span style="color:#c8c8c8;">name</span><span style="color:#608b4e;">=</span><span style="color:#c8c8c8;">&quot;</span><span style="color:gainsboro;">value</span><span style="color:#c8c8c8;">&quot;</span><span style="color:#608b4e;">&gt;</span><span style="color:#608b4e;">The&nbsp;value&nbsp;at&nbsp;the&nbsp;beginning&nbsp;of&nbsp;the&nbsp;priority&nbsp;queue.</span><span style="color:#608b4e;">&lt;/</span><span style="color:#608b4e;">param</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;</span><span style="color:#608b4e;">returns</span><span style="color:#608b4e;">&gt;</span><span style="color:#608b4e;">true&nbsp;if&nbsp;an&nbsp;entry&nbsp;has&nbsp;been&nbsp;successfully&nbsp;retrieved,&nbsp;otherwise&nbsp;false.</span><span style="color:#608b4e;">&lt;/</span><span style="color:#608b4e;">returns</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;</span><span style="color:#608b4e;">remarks</span><span style="color:#608b4e;">&gt;</span><span style="color:#608b4e;">This&nbsp;method&nbsp;blocks&nbsp;until&nbsp;the&nbsp;peek&nbsp;operation&nbsp;has&nbsp;completed.</span><span style="color:#608b4e;">&lt;/</span><span style="color:#608b4e;">remarks</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#569cd6;">public</span>&nbsp;<span style="color:#569cd6;">bool</span>&nbsp;<span style="color:#dcdcaa;">TryPeek</span><span style="color:gainsboro;">(</span><span style="color:#569cd6;">out</span>&nbsp;<span style="color:gainsboro;">V</span><span style="color:#b4b4b4;">?</span>&nbsp;<span style="color:#9cdcfe;">value</span><span style="color:gainsboro;">)</span></pre>
+    /// <summary>
+    /// Tries to retrieve without removing from the priority queue.
+    /// </summary>
+    /// <param name="value">The value at the beginning of the priority queue.</param>
+    /// <returns>true if an entry has been successfully retrieved, otherwise false.</returns>
+    /// <remarks>This method blocks until the peek operation has completed.</remarks>
+    public bool TryPeek(out V? value)
 
-<pre style="font-family:Cascadia Mono;font-size:13px;color:#dadada;background:#1e1e1e;"><span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;</span><span style="color:#608b4e;">summary</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;Blocks&nbsp;until&nbsp;all&nbsp;asynchronous&nbsp;enqueue&nbsp;opertions&nbsp;are&nbsp;completed.</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;/</span><span style="color:#608b4e;">summary</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;</span><span style="color:#608b4e;">remarks</span><span style="color:#608b4e;">&gt;</span><span style="color:#608b4e;">This&nbsp;method&nbsp;blocks&nbsp;until&nbsp;there&nbsp;are&nbsp;no&nbsp;more&nbsp;active&nbsp;asynchronous&nbsp;enqueues</span><span style="color:#608b4e;">&lt;/</span><span style="color:#608b4e;">remarks</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#569cd6;">public</span>&nbsp;<span style="color:#569cd6;">void</span>&nbsp;<span style="color:#dcdcaa;">WaitForAsyncEnqueues</span><span style="color:gainsboro;">(</span><span style="color:#569cd6;">int</span>&nbsp;<span style="color:#9cdcfe;">millisecondsTimeout</span>&nbsp;<span style="color:#b4b4b4;">=</span>&nbsp;<span style="color:#b5cea8;">0</span><span style="color:gainsboro;">)</span></pre>
+    /// <summary>
+    /// Blocks until all asynchronous enqueue opertions are completed.
+    /// </summary>
+    /// <remarks>This method blocks until there are no more active asynchronous enqueues</remarks>
+    public void WaitForAsyncEnqueues(int millisecondsTimeout = 0)
 
-<pre style="font-family:Cascadia Mono;font-size:13px;color:#dadada;background:#1e1e1e;"><span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;</span><span style="color:#608b4e;">summary</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;Clears&nbsp;the&nbsp;entries&nbsp;currently&nbsp;in&nbsp;the&nbsp;queue.</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;/</span><span style="color:#608b4e;">summary</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#608b4e;">///</span><span style="color:#608b4e;">&nbsp;</span><span style="color:#608b4e;">&lt;</span><span style="color:#608b4e;">remarks</span><span style="color:#608b4e;">&gt;</span><span style="color:#608b4e;">Asynchronous&nbsp;enqueues&nbsp;after&nbsp;this&nbsp;method&nbsp;will&nbsp;still&nbsp;be&nbsp;added.</span><span style="color:#608b4e;">&lt;/</span><span style="color:#608b4e;">remarks</span><span style="color:#608b4e;">&gt;</span>
-<span style="color:#569cd6;">public</span>&nbsp;<span style="color:#569cd6;">void</span>&nbsp;<span style="color:#dcdcaa;">Clear</span><span style="color:gainsboro;">()</span></pre>
+    /// <summary>
+    /// Clears the entries currently in the queue.
+    /// </summary>
+    /// <remarks>Asynchronous enqueues after this method will still be added.</remarks>
+    public void Clear()
 
 ### Examples:
 
