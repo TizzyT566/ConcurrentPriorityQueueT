@@ -27,7 +27,7 @@ Nuget Package: [https://www.nuget.org/packages/ConcurrentPriorityQueueT/](https:
 /// <summary>
 /// The priority mode to set the priority queue.
 /// </summary>
-public PriorityType Mode { get; private set; }
+public PriorityType Mode
 ```
 ```csharp
 /// <summary>
