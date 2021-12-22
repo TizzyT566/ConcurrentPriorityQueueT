@@ -6,7 +6,7 @@ namespace System.Collections.Concurrent;
 /// <summary>
 /// Types of priority modes.
 /// </summary>
-public enum PriorityMode : int
+public enum PriorityType : int
 {
     /// <summary>
     /// Max priorities come first.
@@ -76,7 +76,7 @@ public class ConcurrentPriorityQueue<P, V> : IEnumerable<V> where P : IComparabl
     /// <summary>
     /// The priority mode to set the priority queue.
     /// </summary>
-    public PriorityMode Mode { get; private set; }
+    public PriorityType Mode { get; private set; }
     /// <summary>
     /// The number of values currently in the queue.
     /// </summary>
@@ -90,24 +90,12 @@ public class ConcurrentPriorityQueue<P, V> : IEnumerable<V> where P : IComparabl
     /// Creates a new concurrent priority queue.
     /// </summary>
     /// <param name="mode">The type of priority to use for the queue.</param>
-    public ConcurrentPriorityQueue(PriorityMode mode = PriorityMode.Max)
+    public ConcurrentPriorityQueue(PriorityType mode = PriorityType.Max)
     {
         Mode = mode;
 #pragma warning disable CS8604 // Possible null reference argument.
         _head = new(default, default);
 #pragma warning restore CS8604 // Possible null reference argument.
-    }
-
-    /// <summary>
-    /// Clears the entries currently in the queue.
-    /// </summary>
-    /// <remarks>Asynchronously enqueues after this method being called will still be added.</remarks>
-    public void Clear()
-    {
-        while (Interlocked.Exchange(ref _head._lock, 1) == 1) ;
-        _head._next = null;
-        Interlocked.Exchange(ref _count, 0);
-        Interlocked.Exchange(ref _head._lock, 0);
     }
 
     /// <summary>
@@ -209,7 +197,7 @@ public class ConcurrentPriorityQueue<P, V> : IEnumerable<V> where P : IComparabl
     /// <param name="value">The value which has been dequeued.</param>
     /// <returns>true if an entry has been successfully dequeued, otherwise false.</returns>
     /// <remarks>This method blocks until the dequeue operation has completed.</remarks>
-    public bool TryDequeue(out V? value)
+    public bool TryDequeue(out V value)
     {
         while (true)
         {
@@ -218,7 +206,9 @@ public class ConcurrentPriorityQueue<P, V> : IEnumerable<V> where P : IComparabl
             {
                 Interlocked.Exchange(ref _head._lock, 0);
                 if (_asyncEnqueueOperations > 0) continue;
+#pragma warning disable CS8601 // Possible null reference assignment.
                 value = default;
+#pragma warning restore CS8601 // Possible null reference assignment.
                 return false;
             }
             else
@@ -234,9 +224,10 @@ public class ConcurrentPriorityQueue<P, V> : IEnumerable<V> where P : IComparabl
     }
 
     /// <summary>
-    /// 
+    /// Asyncronously dequeues an entry from the priority queue.
     /// </summary>
-    /// <param name="callback"></param>
+    /// <param name="callback">The callback delegate to invoke after dequeuing has completed.</param>
+    /// <remarks>This method does not block.</remarks>
     public void TryDequeueAsync(Action<AsyncPriorityOperationResult>? callback = null)
     {
         _ = ThreadPool.QueueUserWorkItem(_ =>
@@ -299,6 +290,7 @@ public class ConcurrentPriorityQueue<P, V> : IEnumerable<V> where P : IComparabl
     /// <summary>
     /// Blocks until all asynchronous enqueue opertions are completed.
     /// </summary>
+    /// <remarks>This method blocks until there are no more active asynchronous enqueues</remarks>
     public void WaitForAsyncEnqueues(int millisecondsTimeout = 0)
     {
         bool wait = true;
@@ -313,6 +305,18 @@ public class ConcurrentPriorityQueue<P, V> : IEnumerable<V> where P : IComparabl
             }
             Interlocked.Exchange(ref _head._lock, 0);
         }
+    }
+
+    /// <summary>
+    /// Clears the entries currently in the queue.
+    /// </summary>
+    /// <remarks>Asynchronous enqueues after this method will still be added.</remarks>
+    public void Clear()
+    {
+        while (Interlocked.Exchange(ref _head._lock, 1) == 1) ;
+        _head._next = null;
+        Interlocked.Exchange(ref _count, 0);
+        Interlocked.Exchange(ref _head._lock, 0);
     }
 
     /// <summary>
