@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<Nullable>enable</Nullable>
+		<LangVersion>10</LangVersion>
+	</PropertyGroup>
+	<PropertyGroup>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<Authors>Thien H.</Authors>
+		<Version>0.6.0</Version>
+		<Description>A concurrent priority queue with parallelism.</Description>
+	</PropertyGroup>
+
+</Project>

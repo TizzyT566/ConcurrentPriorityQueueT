@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConcurrentPriorityQueueT", "ConcurrentPriorityQueueT\ConcurrentPriorityQueueT.csproj", "{187163B9-F5B4-4E50-9A51-D19B6817514E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConcurrentPriorityQueueT_Test", "ConcurrentPriorityQueueT_Test\ConcurrentPriorityQueueT_Test.csproj", "{9AC5F371-2764-44FF-A993-BCC6B0AE286F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{187163B9-F5B4-4E50-9A51-D19B6817514E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{187163B9-F5B4-4E50-9A51-D19B6817514E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{187163B9-F5B4-4E50-9A51-D19B6817514E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{187163B9-F5B4-4E50-9A51-D19B6817514E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AC5F371-2764-44FF-A993-BCC6B0AE286F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AC5F371-2764-44FF-A993-BCC6B0AE286F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AC5F371-2764-44FF-A993-BCC6B0AE286F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AC5F371-2764-44FF-A993-BCC6B0AE286F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3D7307C4-934D-4C3C-BD00-7F48C444F4BD}
+	EndGlobalSection
+EndGlobal
