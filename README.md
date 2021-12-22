@@ -114,7 +114,8 @@ public bool TryPeek(out V? value)
 /// <summary>
 /// Blocks until all asynchronous enqueue opertions are completed.
 /// </summary>
-/// <remarks>This method blocks until there are no more active asynchronous enqueues</remarks>
+/// <param name="millisecondsTimeout">Time after initial check to double check.</param>
+/// <remarks>This method blocks until there are no more active asynchronous enqueues.</remarks>
 public void WaitForAsyncEnqueues(int millisecondsTimeout = 0)
 ```
 ```csharp
