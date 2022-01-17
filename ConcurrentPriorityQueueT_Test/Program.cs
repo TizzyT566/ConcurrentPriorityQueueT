@@ -62,9 +62,11 @@ for (int i = 0; i < count; i++)
 
 Console.WriteLine(priorityQ.Count);
 
-// Waits for all asynchronous enqueues to complete with a 2 second timeout
 Console.WriteLine($"Async Enqueues left: {priorityQ.AsyncEnqueueOperations}");
-while (!priorityQ.WaitForAsyncEnqueues(0, -2))
+
+// Waits for all asynchronous enqueues to complete and then ensure
+// its empty for at least 2 seconds else times out in 5 seconds.
+while (!priorityQ.WaitForAsyncEnqueues(2000, 5000))
     Console.WriteLine("\nTimed out before enqueues finished.\n");
 
 Console.WriteLine("\nAll Async Enqueues compeleted.\n");
