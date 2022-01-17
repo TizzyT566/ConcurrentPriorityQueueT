@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Text;
 
 // Create a min type priority queue
 ConcurrentPriorityQueue<int, string> priorityQ = new(PriorityType.Min);
@@ -51,25 +52,28 @@ priorityQ.TryDequeueAsync(r =>
 });
 
 
-// Parallel
+// Multiple TryEnqueueAsync calls run in parallel
 Random rnd = new();
-Parallel.For(0, 10000, i =>
+int count = 100;
+for (int i = 0; i < count; i++)
 {
-    int n = rnd.Next(0, 100000);
-    priorityQ.TryEnqueueAsync(n, n.ToString());
-});
+    priorityQ.TryEnqueueAsync(i, i.ToString());
+}
+
+Console.WriteLine(priorityQ.Count);
 
 // Waits for all asynchronous enqueues to complete with a 2 second timeout
 Console.WriteLine($"Async Enqueues left: {priorityQ.AsyncEnqueueOperations}");
-priorityQ.WaitForAsyncEnqueues(2000);
-Console.WriteLine($"Async Enqueues left: {priorityQ.AsyncEnqueueOperations}");
+while (!priorityQ.WaitForAsyncEnqueues(0, -2))
+    Console.WriteLine("\nTimed out before enqueues finished.\n");
 
-Console.WriteLine();
+Console.WriteLine("\nAll Async Enqueues compeleted.\n");
 
+StringBuilder sb = new();
 foreach (string str in priorityQ)
-    Console.WriteLine(str);
+    sb.AppendLine(str);
 
-Console.WriteLine();
+Console.WriteLine(sb.ToString());
 
 Console.WriteLine($"Entries: {priorityQ.Count}");
 

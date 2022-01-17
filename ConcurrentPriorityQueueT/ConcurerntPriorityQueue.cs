@@ -4,7 +4,7 @@ using System.Threading;
 namespace System.Collections.Concurrent;
 
 /// <summary>
-/// Types of priority modes.
+/// Types of priority types.
 /// </summary>
 public enum PriorityType : int
 {
@@ -55,7 +55,7 @@ public class ConcurrentPriorityQueue<P, V> : IEnumerable<V> where P : IComparabl
         public static implicit operator bool(AsyncPriorityOperationResult r) => r.Success;
     }
 
-    internal class PriorityNode
+    private class PriorityNode
     {
         internal readonly P _priority;
         internal readonly V _value;
@@ -74,9 +74,9 @@ public class ConcurrentPriorityQueue<P, V> : IEnumerable<V> where P : IComparabl
     private int _asyncEnqueueOperations = 0;
 
     /// <summary>
-    /// The priority mode to set the priority queue.
+    /// The priority type to set the priority queue.
     /// </summary>
-    public PriorityType Mode { get; private set; }
+    public PriorityType Type { get; private set; }
     /// <summary>
     /// The number of values currently in the queue.
     /// </summary>
@@ -89,10 +89,10 @@ public class ConcurrentPriorityQueue<P, V> : IEnumerable<V> where P : IComparabl
     /// <summary>
     /// Creates a new concurrent priority queue.
     /// </summary>
-    /// <param name="mode">The type of priority to use for the queue.</param>
-    public ConcurrentPriorityQueue(PriorityType mode = PriorityType.Max)
+    /// <param name="type">The type of priority to use for the queue.</param>
+    public ConcurrentPriorityQueue(PriorityType type = PriorityType.Max)
     {
-        Mode = mode;
+        Type = type;
 #pragma warning disable CS8604 // Possible null reference argument.
         _head = new(default, default);
 #pragma warning restore CS8604 // Possible null reference argument.
@@ -113,7 +113,7 @@ public class ConcurrentPriorityQueue<P, V> : IEnumerable<V> where P : IComparabl
         while (crntNode._next != null)
         {
             int comparison = crntNode._next._priority.CompareTo(priority);
-            if (comparison == (int)Mode)
+            if (comparison == (int)Type)
             {
                 break;
             }
@@ -158,36 +158,9 @@ public class ConcurrentPriorityQueue<P, V> : IEnumerable<V> where P : IComparabl
         Interlocked.Increment(ref _asyncEnqueueOperations);
         ThreadPool.QueueUserWorkItem(_ =>
         {
-            //Interlocked.Increment(ref _activeAsyncOperations);
-            while (Interlocked.Exchange(ref _head._lock, 1) == 1) ;
-            PriorityNode crntNode = _head;
-            while (crntNode._next != null)
-            {
-                int comparison = crntNode._next._priority.CompareTo(priority);
-                if (comparison == (int)Mode)
-                {
-                    break;
-                }
-                else if (comparison == 0 && !allowDuplicates)
-                {
-                    Interlocked.Decrement(ref _asyncEnqueueOperations);
-                    Interlocked.Exchange(ref crntNode._lock, 0);
-                    callback?.Invoke(new(false, priority, value));
-                    return;
-                }
-                else
-                {
-                    PriorityNode prevNode = crntNode;
-                    while (Interlocked.Exchange(ref crntNode._next._lock, 1) == 1) ;
-                    crntNode = crntNode._next;
-                    Interlocked.Exchange(ref prevNode._lock, 0);
-                }
-            }
-            crntNode._next = new PriorityNode(priority, value, crntNode._next);
-            Interlocked.Increment(ref _count);
+            bool result = TryEnqueue(priority, value, allowDuplicates);
+            callback?.Invoke(new(result, priority, value));
             Interlocked.Decrement(ref _asyncEnqueueOperations);
-            Interlocked.Exchange(ref crntNode._lock, 0);
-            callback?.Invoke(new(true, priority, value));
         });
     }
 
@@ -231,31 +204,31 @@ public class ConcurrentPriorityQueue<P, V> : IEnumerable<V> where P : IComparabl
     public void TryDequeueAsync(Action<AsyncPriorityOperationResult>? callback = null)
     {
         _ = ThreadPool.QueueUserWorkItem(_ =>
-          {
-              while (true)
-              {
-                  while (Interlocked.Exchange(ref _head._lock, 1) == 1) ;
-                  if (_head._next == null)
-                  {
-                      Interlocked.Exchange(ref _head._lock, 0);
-                      if (_asyncEnqueueOperations > 0) continue;
+        {
+            while (true)
+            {
+                while (Interlocked.Exchange(ref _head._lock, 1) == 1) ;
+                if (_head._next == null)
+                {
+                    Interlocked.Exchange(ref _head._lock, 0);
+                    if (_asyncEnqueueOperations > 0) continue;
 #pragma warning disable CS8604 // Possible null reference argument.
-                      callback?.Invoke(new(false, default, default));
+                    callback?.Invoke(new(false, default, default));
 #pragma warning restore CS8604 // Possible null reference argument.
-                      return;
-                  }
-                  else
-                  {
-                      while (Interlocked.Exchange(ref _head._next._lock, 1) == 1) ;
-                      AsyncPriorityOperationResult result = new(true, _head._next._priority, _head._next._value);
-                      _head._next = _head._next._next;
-                      Interlocked.Decrement(ref _count);
-                      Interlocked.Exchange(ref _head._lock, 0);
-                      callback?.Invoke(result);
-                      return;
-                  }
-              }
-          });
+                    return;
+                }
+                else
+                {
+                    while (Interlocked.Exchange(ref _head._next._lock, 1) == 1) ;
+                    AsyncPriorityOperationResult result = new(true, _head._next._priority, _head._next._value);
+                    _head._next = _head._next._next;
+                    Interlocked.Decrement(ref _count);
+                    Interlocked.Exchange(ref _head._lock, 0);
+                    callback?.Invoke(result);
+                    return;
+                }
+            }
+        });
     }
 
     /// <summary>
@@ -290,22 +263,32 @@ public class ConcurrentPriorityQueue<P, V> : IEnumerable<V> where P : IComparabl
     /// <summary>
     /// Blocks until all asynchronous enqueue opertions are completed.
     /// </summary>
-    /// <param name="millisecondsTimeout">Time after initial check to double check.</param>
-    /// <remarks>This method blocks until there are no more active asynchronous enqueues.</remarks>
-    public void WaitForAsyncEnqueues(int millisecondsTimeout = 0)
+    /// <param name="millisecondsGraceTime">Time after initial check to double check.</param>
+    /// <param name="millisecondTimeout">Total time to wait for async enqueues.</param>
+    /// <returns>true if enqueues have been completed for a specified grace time, false if timed out before enqueues finished.</returns>
+    /// <remarks>This method blocks until there are no more active asynchronous enqueues, or times out.</remarks>
+    public bool WaitForAsyncEnqueues(double millisecondsGraceTime = 0, int millisecondTimeout = -1)
     {
-        bool wait = true;
-        while (wait)
+        bool wait = false;
+        long timeStart = 0;
+        long graceTicks = TimeSpan.FromMilliseconds(millisecondsGraceTime).Ticks;
+        return SpinWait.SpinUntil(() =>
         {
-            while (Interlocked.Exchange(ref _head._lock, 1) == 1) ;
-            if (_asyncEnqueueOperations == 0)
+            if (Volatile.Read(ref _asyncEnqueueOperations) == 0)
             {
-                Thread.Sleep(millisecondsTimeout);
-                if (_asyncEnqueueOperations == 0)
-                    wait = false;
+                long timeStamp = Diagnostics.Stopwatch.GetTimestamp();
+                if (!wait)
+                {
+                    wait = true;
+                    timeStart = timeStamp;
+                }
+                if ((timeStamp - timeStart) >= graceTicks)
+                    return true;
             }
-            Interlocked.Exchange(ref _head._lock, 0);
-        }
+            else
+                wait = false;
+            return false;
+        }, millisecondTimeout);
     }
 
     /// <summary>
